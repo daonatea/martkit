@@ -1,13 +1,13 @@
 import sys
 from pathlib import Path
 import pytest
-from PyQt6.QtCore import QCoreApplication
+from PyQt6.QtWidgets import QApplication
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 @pytest.fixture(scope="session")
 def qapp():
-    app = QCoreApplication.instance() or QCoreApplication(sys.argv)
+    app = QApplication.instance() or QApplication(sys.argv)
     yield app
 
 @pytest.fixture
