@@ -1,0 +1,2 @@
+markitdown[all]
+PyQt6
