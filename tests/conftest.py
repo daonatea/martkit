@@ -3,11 +3,12 @@ import platform
 from pathlib import Path
 import pytest
 
-# macOS 26 Tahoe requires the process to register with the window server before
-# Qt initializes. Importing AppKit triggers NSApplication.sharedApplication().
+# macOS 26 Tahoe requires explicit NSApplication registration before Qt
+# initializes its cocoa platform plugin; without this, QApplication aborts.
 if platform.system() == "Darwin":
     try:
-        import AppKit  # noqa: F401  (pyobjc-framework-Cocoa)
+        import AppKit
+        AppKit.NSApplication.sharedApplication()
     except ImportError:
         pass
 

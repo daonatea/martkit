@@ -23,6 +23,11 @@ pyinstaller \
     src/main.py
 
 echo ""
+echo "==> Fixing code signature (strip extended attributes first)"
+xattr -cr dist/Markiti.app
+codesign -s - --force --deep dist/Markiti.app
+
+echo ""
 echo "==> Done! App built at: dist/Markiti.app"
 echo "==> To install: cp -r dist/Markiti.app /Applications/"
 echo "==> First run: right-click → Open (Gatekeeper bypass, one time only)"
