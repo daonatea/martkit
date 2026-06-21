@@ -19,25 +19,26 @@ class ConvertWorker(QThread):
         self._cancelled = True
 
     def run(self) -> None:
-        if self._cancelled:
-            self.all_done.emit()
-            return
-
-        md = MarkItDown()
-        out = Path(self._output_dir)
-        out.mkdir(parents=True, exist_ok=True)
-
-        for path in self._files:
+        try:
             if self._cancelled:
-                break
-            self.file_started.emit(path)
-            try:
-                result = md.convert(path)
-                stem = Path(path).stem
-                out_path = out / f"{stem}.md"
-                out_path.write_text(result.text_content, encoding="utf-8")
-                self.file_finished.emit(path, str(out_path))
-            except Exception as exc:
-                self.file_error.emit(path, str(exc))
-
-        self.all_done.emit()
+                return
+            md = MarkItDown()
+            out = Path(self._output_dir)
+            out.mkdir(parents=True, exist_ok=True)
+            for path in self._files:
+                if self._cancelled:
+                    break
+                self.file_started.emit(path)
+                try:
+                    result = md.convert(path)
+                    stem = Path(path).stem
+                    out_path = out / f"{stem}.md"
+                    out_path.write_text(result.text_content, encoding="utf-8")
+                    self.file_finished.emit(path, str(out_path))
+                except Exception as exc:
+                    self.file_error.emit(path, str(exc))
+        except Exception:
+            import traceback
+            traceback.print_exc()
+        finally:
+            self.all_done.emit()

@@ -3,6 +3,6 @@ def test_main_window_opens(qapp):
     w = MainWindow()
     w.show()
     assert w.isVisible()
-    assert w.width() == 640
-    assert w.height() == 460
+    assert w.width() == 680
+    assert w.height() == 480
     w.close()

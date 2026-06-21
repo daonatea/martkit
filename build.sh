@@ -23,9 +23,12 @@ pyinstaller \
     src/main.py
 
 echo ""
-echo "==> Fixing code signature (strip extended attributes first)"
-xattr -cr dist/Markiti.app
-codesign -s - --force --deep dist/Markiti.app
+echo "==> Fixing code signature (ditto --norsrc strips resource forks)"
+ditto --norsrc dist/Markiti.app /tmp/Markiti_signed.app
+codesign -s - --force --deep /tmp/Markiti_signed.app
+rm -rf dist/Markiti.app
+mv /tmp/Markiti_signed.app dist/Markiti.app
+codesign --verify --deep dist/Markiti.app && echo "==> Firma OK"
 
 echo ""
 echo "==> Done! App built at: dist/Markiti.app"
