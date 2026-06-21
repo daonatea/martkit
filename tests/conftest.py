@@ -1,9 +1,20 @@
 import sys
+import platform
 from pathlib import Path
 import pytest
+
+# macOS 26 Tahoe requires the process to register with the window server before
+# Qt initializes. Importing AppKit triggers NSApplication.sharedApplication().
+if platform.system() == "Darwin":
+    try:
+        import AppKit  # noqa: F401  (pyobjc-framework-Cocoa)
+    except ImportError:
+        pass
+
 from PyQt6.QtWidgets import QApplication
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
 
 @pytest.fixture(scope="session")
 def qapp():
