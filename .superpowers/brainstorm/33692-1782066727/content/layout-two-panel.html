@@ -1,0 +1,144 @@
+<h2>Layout dos paneles — Markiti</h2>
+<p class="subtitle">Con cola de archivos, estado de conversión y carpeta de salida</p>
+
+<div style="display: flex; gap: 24px; margin-top: 28px; flex-wrap: wrap;">
+
+  <!-- Opción A: Panel izquierdo drop, derecho cola -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)" style="flex: 1; min-width: 300px;">
+    <div class="card-image" style="background: #f0f0f5; padding: 20px; border-radius: 12px 12px 0 0;">
+      <div style="background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px;">
+        <!-- Titlebar -->
+        <div style="background: #ebebeb; padding: 9px 12px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #ddd;">
+          <div style="width:11px;height:11px;border-radius:50%;background:#ff5f56;"></div>
+          <div style="width:11px;height:11px;border-radius:50%;background:#ffbd2e;"></div>
+          <div style="width:11px;height:11px;border-radius:50%;background:#27c840;"></div>
+          <span style="margin: 0 auto; font-size: 11px; color: #555; font-weight: 500;">Markiti</span>
+        </div>
+
+        <!-- Barra de carpeta output arriba -->
+        <div style="background: #f9f9f9; border-bottom: 1px solid #e8e8e8; padding: 7px 12px; display: flex; align-items: center; gap: 8px;">
+          <span style="color: #8e8e93; font-size: 10px;">📁 Carpeta de salida:</span>
+          <span style="color: #007aff; font-size: 10px; flex: 1;">~/Documents/Markdown</span>
+          <button style="font-size: 10px; background: #e8e8ed; border: none; border-radius: 4px; padding: 2px 8px; cursor: pointer; color: #1d1d1f;">Cambiar</button>
+        </div>
+
+        <!-- Dos paneles -->
+        <div style="display: flex; height: 200px;">
+          <!-- Panel izq: drop zone -->
+          <div style="flex: 0 0 45%; border-right: 1px solid #e8e8e8; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center;">
+            <div style="border: 2px dashed #c7c7cc; border-radius: 12px; padding: 20px 12px; text-align: center; width: 100%; background: #fafafa;">
+              <div style="font-size: 22px; margin-bottom: 6px;">📂</div>
+              <div style="font-weight: 600; color: #1d1d1f; font-size: 11px;">Arrastra archivos</div>
+              <div style="color: #8e8e93; font-size: 10px; margin-top: 2px;">o</div>
+            </div>
+            <button style="background: #007aff; color: white; border: none; border-radius: 7px; padding: 7px 0; font-size: 11px; font-weight: 500; cursor: pointer; width: 100%;">Seleccionar archivos</button>
+          </div>
+
+          <!-- Panel der: cola de archivos -->
+          <div style="flex: 1; padding: 12px; overflow: hidden;">
+            <div style="font-size: 10px; font-weight: 600; color: #8e8e93; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">3 archivos</div>
+
+            <!-- Archivo pendiente -->
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 0; border-bottom: 1px solid #f0f0f0;">
+              <span style="font-size: 14px;">📄</span>
+              <span style="flex: 1; color: #1d1d1f; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">informe_anual.pdf</span>
+              <span style="color: #34c759; font-size: 13px;">✓</span>
+            </div>
+            <!-- Archivo convirtiendo -->
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 0; border-bottom: 1px solid #f0f0f0; background: #f0f7ff; border-radius: 4px; padding: 5px 4px;">
+              <span style="font-size: 14px;">📊</span>
+              <span style="flex: 1; color: #1d1d1f; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">presupuesto.xlsx</span>
+              <span style="color: #007aff; font-size: 10px;">⏳</span>
+            </div>
+            <!-- Archivo pendiente -->
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 0;">
+              <span style="font-size: 14px;">📝</span>
+              <span style="flex: 1; color: #8e8e93; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">contrato.docx</span>
+              <span style="color: #c7c7cc; font-size: 10px;">—</span>
+            </div>
+
+            <!-- Botones abajo -->
+            <div style="margin-top: 10px; display: flex; gap: 6px;">
+              <button style="flex:1; background: #34c759; color: white; border: none; border-radius: 7px; padding: 6px 0; font-size: 11px; font-weight: 600; cursor: pointer;">Convertir todo</button>
+              <button style="background: #f2f2f7; color: #1d1d1f; border: none; border-radius: 7px; padding: 6px 8px; font-size: 11px; cursor: pointer;">🗂️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Drop izquierda, cola derecha</h3>
+      <p>Carpeta de salida configurable arriba. Panel derecho muestra estado de cada archivo (✓ listo, ⏳ convirtiendo, — pendiente). Botón "Convertir todo" + botón de abrir carpeta.</p>
+    </div>
+  </div>
+
+  <!-- Opción B: Drop arriba, lista abajo full-width -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)" style="flex: 1; min-width: 300px;">
+    <div class="card-image" style="background: #f0f0f5; padding: 20px; border-radius: 12px 12px 0 0;">
+      <div style="background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px;">
+        <!-- Titlebar -->
+        <div style="background: #ebebeb; padding: 9px 12px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #ddd;">
+          <div style="width:11px;height:11px;border-radius:50%;background:#ff5f56;"></div>
+          <div style="width:11px;height:11px;border-radius:50%;background:#ffbd2e;"></div>
+          <div style="width:11px;height:11px;border-radius:50%;background:#27c840;"></div>
+          <span style="margin: 0 auto; font-size: 11px; color: #555; font-weight: 500;">Markiti</span>
+        </div>
+
+        <!-- Drop zone compacta arriba -->
+        <div style="padding: 12px 12px 8px;">
+          <div style="border: 2px dashed #c7c7cc; border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fafafa;">
+            <span style="font-size: 20px;">📂</span>
+            <div style="flex: 1;">
+              <div style="font-weight: 600; color: #1d1d1f; font-size: 11px;">Arrastra archivos aquí</div>
+              <div style="color: #8e8e93; font-size: 10px;">PDF, Word, Excel, PowerPoint…</div>
+            </div>
+            <button style="background: #007aff; color: white; border: none; border-radius: 6px; padding: 5px 10px; font-size: 10px; font-weight: 500; cursor: pointer; white-space: nowrap;">Seleccionar</button>
+          </div>
+        </div>
+
+        <!-- Carpeta output -->
+        <div style="padding: 0 12px 8px; display: flex; align-items: center; gap: 6px;">
+          <span style="color: #8e8e93; font-size: 10px;">📁</span>
+          <span style="color: #007aff; font-size: 10px; flex:1;">~/Documents/Markdown</span>
+          <button style="font-size: 10px; background: none; border: none; color: #007aff; cursor: pointer; padding: 0;">Cambiar</button>
+        </div>
+
+        <!-- Lista de archivos -->
+        <div style="border-top: 1px solid #e8e8e8; padding: 8px 12px;">
+          <div style="font-size: 10px; font-weight: 600; color: #8e8e93; margin-bottom: 6px; display: flex; justify-content: space-between;"><span>ARCHIVOS (3)</span><span style="color: #007aff; cursor: pointer;">Limpiar</span></div>
+
+          <div style="display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid #f5f5f5;">
+            <span style="font-size: 13px;">📄</span>
+            <span style="flex:1; font-size: 11px; color: #1d1d1f;">informe_anual.pdf</span>
+            <span style="font-size: 10px; color: #34c759; font-weight: 500;">Listo ✓</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid #f5f5f5; background: #f0f7ff; border-radius: 4px; padding: 4px 4px;">
+            <span style="font-size: 13px;">📊</span>
+            <span style="flex:1; font-size: 11px; color: #1d1d1f;">presupuesto.xlsx</span>
+            <span style="font-size: 10px; color: #007aff;">Convirtiendo…</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; padding: 4px 0;">
+            <span style="font-size: 13px;">📝</span>
+            <span style="flex:1; font-size: 11px; color: #8e8e93;">contrato.docx</span>
+            <span style="font-size: 10px; color: #c7c7cc;">Pendiente</span>
+          </div>
+        </div>
+
+        <!-- Barra inferior de acciones -->
+        <div style="padding: 8px 12px; background: #f9f9f9; border-top: 1px solid #e8e8e8; display: flex; gap: 6px;">
+          <button style="flex:1; background: #34c759; color: white; border: none; border-radius: 7px; padding: 6px 0; font-size: 11px; font-weight: 600; cursor: pointer;">Convertir todo</button>
+          <button style="background: #f2f2f7; color: #1d1d1f; border: none; border-radius: 7px; padding: 6px 10px; font-size: 11px; cursor: pointer;">Abrir carpeta 🗂️</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Drop arriba, lista abajo full-width</h3>
+      <p>Drop zone compacta en la parte superior (siempre visible). Lista de archivos ocupa toda la anchura. Barra de acciones pegada al fondo con "Convertir todo" y "Abrir carpeta".</p>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center; margin-top: 20px; font-size: 13px; color: #8e8e93;">
+  Ambas tienen: múltiples archivos · estado visible · carpeta de salida configurable · botón abrir carpeta
+</p>

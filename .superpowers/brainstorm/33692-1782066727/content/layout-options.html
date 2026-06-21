@@ -1,0 +1,110 @@
+<h2>Layout de la ventana principal</h2>
+<p class="subtitle">¿Cómo debería verse Markiti cuando se abre?</p>
+
+<div class="cards" style="gap: 24px; margin-top: 32px;">
+
+  <!-- Opción A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)" style="flex:1; min-width: 260px;">
+    <div class="card-image" style="background: #f5f5f7; padding: 24px; border-radius: 12px 12px 0 0;">
+      <!-- Mock ventana macOS -->
+      <div style="background: #ffffff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.12); overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+        <!-- Titlebar -->
+        <div style="background: #f0f0f0; padding: 10px 14px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid #e0e0e0;">
+          <div style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#27c840;"></div>
+          <span style="margin: 0 auto; font-size: 12px; color: #666; font-weight: 500;">Markiti</span>
+        </div>
+        <!-- Contenido -->
+        <div style="padding: 32px 24px; text-align: center;">
+          <!-- Drop zone grande -->
+          <div style="border: 2px dashed #c7c7cc; border-radius: 16px; padding: 36px 20px; background: #fafafa; margin-bottom: 16px;">
+            <div style="font-size: 32px; margin-bottom: 8px;">📄</div>
+            <div style="font-size: 14px; font-weight: 600; color: #1d1d1f; margin-bottom: 4px;">Arrastra un archivo aquí</div>
+            <div style="font-size: 12px; color: #8e8e93;">PDF, Word, Excel, PowerPoint…</div>
+          </div>
+          <!-- Botón -->
+          <button style="background: #007aff; color: white; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 500; cursor: pointer; width: 100%;">Seleccionar archivo</button>
+          <!-- Status -->
+          <div style="margin-top: 12px; font-size: 12px; color: #8e8e93;">Listo para convertir</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Drop zone centrada</h3>
+      <p>Todo el foco en la zona de arrastre. Limpia, directa. El usuario entiende qué hacer al instante.</p>
+    </div>
+  </div>
+
+  <!-- Opción B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)" style="flex:1; min-width: 260px;">
+    <div class="card-image" style="background: #f5f5f7; padding: 24px; border-radius: 12px 12px 0 0;">
+      <div style="background: #ffffff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.12); overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+        <!-- Titlebar -->
+        <div style="background: #f0f0f0; padding: 10px 14px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid #e0e0e0;">
+          <div style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#27c840;"></div>
+          <span style="margin: 0 auto; font-size: 12px; color: #666; font-weight: 500;">Markiti</span>
+        </div>
+        <!-- Header de la app -->
+        <div style="padding: 20px 20px 0; text-align: center;">
+          <div style="font-size: 18px; font-weight: 700; color: #1d1d1f;">Markiti</div>
+          <div style="font-size: 11px; color: #8e8e93; margin-top: 2px;">Convierte documentos a Markdown</div>
+        </div>
+        <!-- Drop zone compacta -->
+        <div style="padding: 16px 20px;">
+          <div style="border: 2px dashed #c7c7cc; border-radius: 14px; padding: 28px 16px; background: #fafafa; text-align: center; margin-bottom: 12px;">
+            <div style="font-size: 28px; margin-bottom: 6px;">⬇️</div>
+            <div style="font-size: 13px; font-weight: 600; color: #1d1d1f;">Arrastra aquí</div>
+          </div>
+          <button style="background: #007aff; color: white; border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 500; cursor: pointer; width: 100%; margin-bottom: 8px;">Seleccionar archivo</button>
+          <!-- Historial mini -->
+          <div style="background: #f2f2f7; border-radius: 10px; padding: 10px 12px;">
+            <div style="font-size: 11px; color: #8e8e93; font-weight: 600; margin-bottom: 6px;">RECIENTES</div>
+            <div style="font-size: 12px; color: #3c3c43; display: flex; justify-content: space-between;"><span>informe.pdf</span><span style="color:#34c759;">✓</span></div>
+            <div style="font-size: 12px; color: #3c3c43; margin-top: 4px; display: flex; justify-content: space-between;"><span>presupuesto.xlsx</span><span style="color:#34c759;">✓</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Con historial de sesión</h3>
+      <p>Añade una sección con los últimos archivos convertidos. Más visual feedback, pero más elementos en pantalla.</p>
+    </div>
+  </div>
+
+  <!-- Opción C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)" style="flex:1; min-width: 260px;">
+    <div class="card-image" style="background: #f5f5f7; padding: 24px; border-radius: 12px 12px 0 0;">
+      <div style="background: #ffffff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.12); overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+        <!-- Titlebar -->
+        <div style="background: #f0f0f0; padding: 10px 14px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid #e0e0e0;">
+          <div style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#27c840;"></div>
+          <span style="margin: 0 auto; font-size: 12px; color: #666; font-weight: 500;">Markiti</span>
+        </div>
+        <!-- Dark mode -->
+        <div style="padding: 28px 20px; text-align: center; background: #1c1c1e;">
+          <div style="border: 2px dashed #3a3a3c; border-radius: 16px; padding: 32px 16px; background: #2c2c2e; margin-bottom: 14px;">
+            <div style="font-size: 30px; margin-bottom: 8px;">🗂️</div>
+            <div style="font-size: 14px; font-weight: 600; color: #f2f2f7;">Arrastra un archivo aquí</div>
+            <div style="font-size: 12px; color: #636366; margin-top: 4px;">PDF, Word, Excel, PowerPoint…</div>
+          </div>
+          <button style="background: #0a84ff; color: white; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 500; cursor: pointer; width: 100%;">Seleccionar archivo</button>
+          <div style="margin-top: 12px; font-size: 12px; color: #636366;">Listo para convertir</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Dark mode nativo</h3>
+      <p>Igual que A pero con fondo oscuro (como el Mac en dark mode). Se ve premium. El sistema lo adapta automáticamente.</p>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center; margin-top: 24px; font-size: 13px; color: #8e8e93;">
+  Haz clic en la opción que más te gusta — puedes seleccionar una
+</p>

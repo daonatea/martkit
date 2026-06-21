@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markiti — Diseño</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 24px 60px;
+    gap: 48px;
+  }
+
+  .page-title {
+    text-align: center;
+    color: rgba(255,255,255,0.9);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .page-sub {
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  /* MAC WINDOW WRAPPER */
+  .mac-window {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow:
+      0 0 0 0.5px rgba(0,0,0,0.18),
+      0 8px 32px rgba(0,0,0,0.28),
+      0 32px 80px rgba(0,0,0,0.22);
+    overflow: hidden;
+    width: 640px;
+    max-width: 100%;
+    transition: transform 0.3s ease;
+  }
+
+  .mac-window:hover { transform: translateY(-2px); }
+
+  .titlebar {
+    background: linear-gradient(to bottom, #ececec, #e8e8e8);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #d8d8d8;
+    position: relative;
+  }
+  .dot { width: 13px; height: 13px; border-radius: 50%; }
+  .dot-red   { background: #ff5f56; }
+  .dot-yellow{ background: #ffbd2e; }
+  .dot-green { background: #27c840; }
+  .titlebar-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    color: #3d3d3d;
+    letter-spacing: -0.01em;
+  }
+
+  /* OUTPUT FOLDER BAR */
+  .folder-bar {
+    background: #f5f5f7;
+    border-bottom: 1px solid #e5e5ea;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .folder-icon { font-size: 14px; }
+  .folder-label { color: #8e8e93; }
+  .folder-path {
+    color: #007aff;
+    font-weight: 500;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .folder-change {
+    background: #e5e5ea;
+    border: none;
+    border-radius: 5px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: #3c3c43;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+  }
+  .folder-change:hover { background: #d8d8de; }
+
+  /* MAIN CONTENT */
+  .app-body {
+    display: flex;
+    height: 400px;
+  }
+
+  /* DROP ZONE — LEFT HALF */
+  .drop-zone {
+    flex: 0 0 48%;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #e5e5ea;
+    background: #fafafa;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Animated gradient blob behind drop target */
+  .drop-zone::before {
+    content: '';
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(circle, rgba(0,122,255,0.08) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.6; }
+  }
+
+  .drop-target {
+    width: 100%;
+    border: 1.5px dashed #b0b0ba;
+    border-radius: 18px;
+    padding: 32px 20px;
+    text-align: center;
+    background: rgba(255,255,255,0.8);
+    position: relative;
+    z-index: 1;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .drop-target:hover {
+    border-color: #007aff;
+    background: rgba(0,122,255,0.04);
+  }
+
+  .drop-icon {
+    font-size: 38px;
+    margin-bottom: 10px;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  }
+
+  .drop-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 4px;
+  }
+
+  .drop-sub {
+    font-size: 11.5px;
+    color: #8e8e93;
+    line-height: 1.5;
+  }
+
+  .formats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .format-tag {
+    background: #f2f2f7;
+    border-radius: 20px;
+    padding: 2px 9px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #636366;
+  }
+
+  .btn-select {
+    background: #007aff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 0;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-select:hover { background: #0066d6; transform: scale(0.99); }
+  .btn-select:active { transform: scale(0.97); }
+
+  /* FILE QUEUE — RIGHT HALF */
+  .file-queue {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .queue-header {
+    padding: 14px 16px 10px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .queue-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1d1d1f;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .queue-count {
+    font-size: 11px;
+    color: #8e8e93;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .queue-clear {
+    margin-left: auto;
+    font-size: 11px;
+    color: #007aff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+  }
+
+  .queue-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 0;
+  }
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .file-item:hover { background: #f5f5f7; }
+
+  .file-item.converting { background: #f0f7ff; }
+  .file-item.done { }
+  .file-item.error { background: #fff5f5; }
+
+  .file-type-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .file-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .file-name {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #1d1d1f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+  }
+  .file-size {
+    font-size: 10.5px;
+    color: #8e8e93;
+  }
+
+  .file-status {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .status-done   { color: #34c759; }
+  .status-busy   { color: #007aff; }
+  .status-wait   { color: #c7c7cc; }
+  .status-error  { color: #ff3b30; }
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #007aff, #5ac8fa);
+    width: 60%;
+    border-radius: 0 2px 2px 0;
+    animation: progress-anim 1.8s ease-in-out infinite;
+  }
+  @keyframes progress-anim {
+    0%   { width: 20%; opacity: 1; }
+    80%  { width: 85%; opacity: 1; }
+    100% { width: 85%; opacity: 0; }
+  }
+
+  .empty-queue {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #c7c7cc;
+    font-size: 12px;
+    gap: 8px;
+    padding: 24px;
+    text-align: center;
+  }
+  .empty-icon { font-size: 32px; opacity: 0.4; }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    background: linear-gradient(to bottom, #f5f5f7, #efefef);
+    border-top: 1px solid #e0e0e0;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-convert {
+    flex: 1;
+    background: linear-gradient(to bottom, #34c759, #2db14e);
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 9px 0;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    box-shadow: 0 1px 3px rgba(52,199,89,0.3);
+    transition: transform 0.1s, opacity 0.15s;
+  }
+  .btn-convert:hover { opacity: 0.92; }
+  .btn-convert:active { transform: scale(0.98); }
+
+  .btn-folder {
+    background: #e5e5ea;
+    color: #3c3c43;
+    border: none;
+    border-radius: 9px;
+    padding: 9px 13px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .btn-folder:hover { background: #d8d8de; }
+
+  .result-label {
+    font-size: 11.5px;
+    color: #34c759;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* LABEL */
+  .variant-label {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    font-style: italic;
+  }
+
+  .divider {
+    width: 1px;
+    height: 28px;
+    background: #e0e0e0;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div>
+  <div class="page-title">Markiti — Propuesta de diseño</div>
+  <div class="page-sub">Layout principal con cola de archivos y carpeta configurable</div>
+</div>
+
+<!-- VENTANA PRINCIPAL -->
+<div class="mac-window">
+
+  <!-- Titlebar -->
+  <div class="titlebar">
+    <div class="dot dot-red"></div>
+    <div class="dot dot-yellow"></div>
+    <div class="dot dot-green"></div>
+    <span class="titlebar-title">Markiti</span>
+  </div>
+
+  <!-- Barra de carpeta output -->
+  <div class="folder-bar">
+    <span class="folder-icon">📁</span>
+    <span class="folder-label">Salida:</span>
+    <span class="folder-path">~/Documents/Markdown convertidos</span>
+    <button class="folder-change">Cambiar…</button>
+  </div>
+
+  <!-- Cuerpo principal: drop zone + cola -->
+  <div class="app-body">
+
+    <!-- Drop zone izquierda -->
+    <div class="drop-zone">
+      <div class="drop-target">
+        <span class="drop-icon">🗂️</span>
+        <div class="drop-title">Arrastra tus archivos aquí</div>
+        <div class="drop-sub">O selecciónalos con el botón</div>
+        <div class="formats">
+          <span class="format-tag">PDF</span>
+          <span class="format-tag">Word</span>
+          <span class="format-tag">Excel</span>
+          <span class="format-tag">PowerPoint</span>
+          <span class="format-tag">HTML</span>
+          <span class="format-tag">+más</span>
+        </div>
+      </div>
+      <button class="btn-select">Seleccionar archivos…</button>
+    </div>
+
+    <!-- Cola de archivos derecha -->
+    <div class="file-queue">
+      <div class="queue-header">
+        <span class="queue-title">Archivos</span>
+        <span class="queue-count">4 en cola</span>
+        <button class="queue-clear">Limpiar</button>
+      </div>
+
+      <div class="queue-list">
+
+        <!-- Archivo convertido -->
+        <div class="file-item done">
+          <span class="file-type-icon">📄</span>
+          <div class="file-info">
+            <div class="file-name">informe_anual_2024.pdf</div>
+            <div class="file-size">2.4 MB</div>
+          </div>
+          <div class="file-status status-done">✓ Listo</div>
+        </div>
+
+        <!-- Archivo convirtiendo -->
+        <div class="file-item converting">
+          <span class="file-type-icon">📊</span>
+          <div class="file-info">
+            <div class="file-name">presupuesto_Q4.xlsx</div>
+            <div class="file-size">840 KB</div>
+          </div>
+          <div class="file-status status-busy">⏳ Convirtiendo</div>
+          <div class="progress-bar"></div>
+        </div>
+
+        <!-- Pendiente -->
+        <div class="file-item">
+          <span class="file-type-icon">📝</span>
+          <div class="file-info">
+            <div class="file-name">contrato_servicios.docx</div>
+            <div class="file-size">156 KB</div>
+          </div>
+          <div class="file-status status-wait">— En espera</div>
+        </div>
+
+        <!-- Pendiente -->
+        <div class="file-item">
+          <span class="file-type-icon">📋</span>
+          <div class="file-info">
+            <div class="file-name">presentacion_producto.pptx</div>
+            <div class="file-size">5.1 MB</div>
+          </div>
+          <div class="file-status status-wait">— En espera</div>
+        </div>
+
+      </div>
+
+      <!-- Barra de acciones -->
+      <div class="bottom-bar">
+        <span class="result-label">1 / 4 listos</span>
+        <div class="divider"></div>
+        <button class="btn-convert">Convertir todo →</button>
+        <button class="btn-folder">🗂️ Abrir carpeta</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="variant-label">Tamaño real aprox. 640 × 460 px · Adapta a Dark Mode del sistema</div>
+
+<!-- Inject helper script -->
+<script src="/scripts/helper.js"></script>
+</body>
+</html>
