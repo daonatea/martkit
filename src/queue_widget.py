@@ -1,22 +1,45 @@
 import time
 import math
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QSize
 from PyQt6.QtGui import QPainter, QLinearGradient, QColor
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel,
-    QScrollArea, QFrame, QPushButton,
+    QScrollArea, QFrame, QPushButton, QSizePolicy,
 )
+
+
+class ElidedLabel(QLabel):
+    """QLabel que trunca el texto en el medio con '...' al quedarse sin espacio."""
+    def __init__(self, text: str, parent=None):
+        super().__init__(parent)
+        self._full_text = text
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self.setMinimumWidth(0)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._update_elided()
+
+    def _update_elided(self):
+        elided = self.fontMetrics().elidedText(
+            self._full_text, Qt.TextElideMode.ElideMiddle, self.width()
+        )
+        super().setText(elided)
+
+    def setFullText(self, text: str):
+        self._full_text = text
+        self._update_elided()
 from queue_model import FileQueueModel, FileStatus, FileItem
 
-# Status colours
-_CLR_WAIT    = "#B8B9D0"
-_CLR_CONV    = "#6E8EFF"
+# Status colours derivados del logo (violeta #643CC8, navy #12165A)
+_CLR_WAIT    = "#B0A8D8"
+_CLR_CONV    = "#7B52D4"   # violeta logo, más claro
 _CLR_DONE    = "#5BBF85"
 _CLR_ERR     = "#FF7A7A"
-_BG_CONV     = "#F2F4FF"
+_BG_CONV     = "#F0ECFD"   # violeta muy claro
 _BG_ERR      = "#FFF4F4"
 _BG_ROW      = "#FFFFFF"
-_BORDER_ROW  = "#F0F1F7"
+_BORDER_ROW  = "#EAE7F8"
 
 
 class FileRow(QFrame):
@@ -41,8 +64,8 @@ class FileRow(QFrame):
 
         info = QVBoxLayout()
         info.setSpacing(2)
-        name = QLabel(item.name)
-        name.setStyleSheet("font-size: 12px; font-weight: 500; color: #1C1C2E;")
+        name = ElidedLabel(item.name)
+        name.setStyleSheet("font-size: 12px; font-weight: 500; color: #12165A;")
         size = QLabel(item.size_label)
         size.setStyleSheet("font-size: 10px; color: #9A9BB8;")
         info.addWidget(name)
@@ -97,13 +120,15 @@ class FileRow(QFrame):
         w = 120
         x = int(self._progress_x) - w
         grad = QLinearGradient(x, y, x + w, y)
-        grad.setColorAt(0,   QColor(110, 142, 255, 0))
-        grad.setColorAt(0.5, QColor(110, 142, 255, 180))
-        grad.setColorAt(1,   QColor(110, 142, 255, 0))
+        grad.setColorAt(0,   QColor(100, 60, 200, 0))
+        grad.setColorAt(0.5, QColor(100, 60, 200, 180))
+        grad.setColorAt(1,   QColor(100, 60, 200, 0))
         painter.fillRect(x, y, w, 2, grad)
 
 
 class QueueWidget(QWidget):
+    queue_changed = pyqtSignal()
+
     def __init__(self, model: FileQueueModel, strings: dict, parent=None):
         super().__init__(parent)
         self._model = model
@@ -127,7 +152,7 @@ class QueueWidget(QWidget):
         clear = QPushButton(self._strings["queue_clear"])
         clear.setFlat(True)
         clear.setStyleSheet(
-            "font-size:11px;color:#9BAEFF;border:none;background:transparent;padding:0;"
+            "font-size:11px;color:#643CC8;border:none;background:transparent;padding:0;"
         )
         clear.clicked.connect(self._on_clear)
         header.addWidget(self._header_lbl)
@@ -138,15 +163,16 @@ class QueueWidget(QWidget):
 
         sep = QFrame()
         sep.setFrameShape(QFrame.Shape.HLine)
-        sep.setStyleSheet("color:#EEEEF6;")
+        sep.setStyleSheet("color:#E2DFFA;")
         layout.addWidget(sep)
 
         self._scroll = QScrollArea()
         self._scroll.setWidgetResizable(True)
         self._scroll.setFrameShape(QFrame.Shape.NoFrame)
-        self._scroll.setStyleSheet("background: #FAFBFE;")
+        self._scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self._scroll.setStyleSheet("background: #F8F7FD;")
         self._container = QWidget()
-        self._container.setStyleSheet("background: #FAFBFE;")
+        self._container.setStyleSheet("background: #F8F7FD;")
         self._rows_layout = QVBoxLayout(self._container)
         self._rows_layout.setContentsMargins(0, 0, 0, 0)
         self._rows_layout.setSpacing(0)
@@ -163,6 +189,7 @@ class QueueWidget(QWidget):
             idx = self._rows_layout.count() - 1
             self._rows_layout.insertWidget(idx, row)
         self._refresh_count()
+        self.queue_changed.emit()
 
     def update_status(self, path: str, status: FileStatus, error: str = "") -> None:
         self._model.set_status(path, status, error)
@@ -180,6 +207,7 @@ class QueueWidget(QWidget):
             row.deleteLater()
         self._rows.clear()
         self._refresh_count()
+        self.queue_changed.emit()
 
     def _refresh_count(self):
         n = self._model.total()

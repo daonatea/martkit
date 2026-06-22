@@ -5,7 +5,7 @@ def test_default_output_folder(qapp, tmp_path):
     from settings import AppSettings
     qs = QSettings(str(tmp_path / "test.ini"), QSettings.Format.IniFormat)
     s = AppSettings(qsettings=qs)
-    assert s.output_folder() == str(Path.home() / "Documents" / "Markiti")
+    assert s.output_folder() == str(Path.home() / "Documents" / "markIT")
 
 def test_set_and_get_output_folder(qapp, tmp_path):
     from settings import AppSettings

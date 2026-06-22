@@ -1,2 +1,13 @@
-markitdown[all]
-PyQt6
+beautifulsoup4==4.15.0
+charset-normalizer==3.4.7
+lxml==6.1.1
+magika==0.6.3
+markitdown==0.1.6
+openpyxl==3.1.5
+pandas==3.0.3
+pdfminer.six==20260107
+pydub==0.25.1
+PyQt6==6.11.0
+PyQt6-Qt6==6.11.1
+PyQt6_sip==13.11.1
+requests==2.34.2

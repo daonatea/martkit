@@ -4,6 +4,7 @@ from PyQt6.QtGui import QDesktopServices
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QPushButton, QFileDialog, QFrame, QSizePolicy,
+    QMessageBox,
 )
 from settings import AppSettings
 from i18n import load_strings
@@ -12,21 +13,21 @@ from queue_widget import QueueWidget
 from queue_model import FileQueueModel, FileStatus
 from converter import ConvertWorker
 
-# Palette constants
-_BG_APP      = "#F6F7FB"
+# Palette derivada del logo: navy #12165A + violeta #643CC8
+_BG_APP      = "#F5F4FC"
 _BG_SURFACE  = "#FFFFFF"
-_BORDER      = "#E8EAF2"
-_TEXT_PRI    = "#1C1C2E"
-_TEXT_SEC    = "#7C7D95"
-_ACCENT      = "#9BAEFF"
+_BORDER      = "#E2DFFA"
+_TEXT_PRI    = "#12165A"   # navy del logo
+_TEXT_SEC    = "#6B5B9E"
+_ACCENT      = "#643CC8"   # violeta del logo
 
-_BTN_NEUTRAL_BG   = "#EEEEF6"
-_BTN_NEUTRAL_HV   = "#E4E4EF"
-_BTN_NEUTRAL_TEXT = "#5A5B78"
+_BTN_NEUTRAL_BG   = "#EEEDF8"
+_BTN_NEUTRAL_HV   = "#E4E2F3"
+_BTN_NEUTRAL_TEXT = "#3D3476"
 
-_BTN_CONVERT_BG   = "#EDFBF3"
-_BTN_CONVERT_HV   = "#D9F5E7"
-_BTN_CONVERT_TEXT = "#2C7A4B"
+_BTN_CONVERT_BG   = "#EDE8FB"
+_BTN_CONVERT_HV   = "#E0D9F8"
+_BTN_CONVERT_TEXT = "#3D1F9E"
 
 _BTN_CANCEL_BG    = "#FFEEEE"
 _BTN_CANCEL_HV    = "#FFE0E0"
@@ -75,6 +76,7 @@ class MainWindow(QMainWindow):
 
         self._queue = QueueWidget(self._model, self._strings)
         self._queue.setStyleSheet(f"background: {_BG_APP};")
+        self._queue.queue_changed.connect(self._refresh_convert_btn)
         body.addWidget(self._queue, stretch=1)
 
         body_w = QWidget()
@@ -147,22 +149,10 @@ class MainWindow(QMainWindow):
 
         self._convert_btn = QPushButton(self._strings["btn_convert"])
         self._convert_btn.setFixedHeight(36)
-        self._convert_btn.setStyleSheet(f"""
-            QPushButton {{
-                background:{_BTN_CONVERT_BG};
-                color:{_BTN_CONVERT_TEXT};
-                border:none;
-                border-radius:10px;
-                font-size:13px;
-                font-weight:600;
-                padding:0 22px;
-            }}
-            QPushButton:hover  {{ background:{_BTN_CONVERT_HV}; }}
-            QPushButton:pressed {{ background:#C8EFD8; }}
-            QPushButton:disabled {{ background:{_BTN_NEUTRAL_BG}; color:#B0B1C8; }}
-        """)
+        self._convert_btn.setEnabled(False)
         self._convert_btn.clicked.connect(self._on_convert_clicked)
         h.addWidget(self._convert_btn)
+        self._apply_convert_style()
 
         open_btn = QPushButton(self._strings["btn_open_folder"])
         open_btn.setFixedHeight(36)
@@ -192,6 +182,7 @@ class MainWindow(QMainWindow):
     def _on_files_added(self, paths: list[str]):
         self._queue.add_files(paths)
         self._refresh_counter()
+        self._refresh_convert_btn()
 
     def _change_folder(self):
         path = QFileDialog.getExistingDirectory(
@@ -210,9 +201,6 @@ class MainWindow(QMainWindow):
         if self._worker and self._worker.isRunning():
             self._worker.cancel()
             self._convert_btn.setText(self._strings["btn_convert"])
-            self._convert_btn.setStyleSheet(self._convert_btn.styleSheet().replace(
-                _BTN_CANCEL_BG, _BTN_CONVERT_BG
-            ).replace(_BTN_CANCEL_TEXT, _BTN_CONVERT_TEXT))
             self._apply_convert_style()
             return
 
@@ -232,29 +220,24 @@ class MainWindow(QMainWindow):
                 self._refresh_counter(),
             )
         )
-        self._worker.file_error.connect(
-            lambda p, e: (
-                self._queue.update_status(p, FileStatus.ERROR, e),
-                self._refresh_counter(),
-            )
-        )
+        self._worker.file_error.connect(self._on_file_error)
         self._worker.all_done.connect(self._on_all_done)
         self._worker.start()
 
     def _apply_convert_style(self):
         self._convert_btn.setStyleSheet(f"""
             QPushButton {{
-                background:{_BTN_CONVERT_BG};
-                color:{_BTN_CONVERT_TEXT};
+                background:{_ACCENT};
+                color:#FFFFFF;
                 border:none;
                 border-radius:10px;
                 font-size:13px;
                 font-weight:600;
                 padding:0 22px;
             }}
-            QPushButton:hover  {{ background:{_BTN_CONVERT_HV}; }}
-            QPushButton:pressed {{ background:#C8EFD8; }}
-            QPushButton:disabled {{ background:{_BTN_NEUTRAL_BG}; color:#B0B1C8; }}
+            QPushButton:hover  {{ background:#7B52D4; }}
+            QPushButton:pressed {{ background:#4E2A9E; }}
+            QPushButton:disabled {{ background:#DDDBE6; color:#A8A8BE; }}
         """)
 
     def _apply_cancel_style(self):
@@ -272,10 +255,33 @@ class MainWindow(QMainWindow):
             QPushButton:pressed {{ background:#FFD0D0; }}
         """)
 
+    def _on_file_error(self, path: str, error: str):
+        self._queue.update_status(path, FileStatus.ERROR, error)
+        self._refresh_counter()
+        name = Path(path).name
+        dlg = QMessageBox(self)
+        dlg.setWindowTitle("Error de conversión")
+        dlg.setIcon(QMessageBox.Icon.Warning)
+        dlg.setText(f"No se pudo convertir <b>{name}</b>")
+        dlg.setInformativeText(error)
+        dlg.exec()
+
     def _on_all_done(self):
         self._convert_btn.setText(self._strings["btn_convert"])
         self._apply_convert_style()
         self._refresh_counter()
+        self._refresh_convert_btn()
+
+    def _refresh_convert_btn(self):
+        has_waiting = bool(self._queue.waiting_paths())
+        is_running = bool(self._worker and self._worker.isRunning())
+        self._convert_btn.setEnabled(has_waiting or is_running)
+
+    def closeEvent(self, event):
+        if self._worker and self._worker.isRunning():
+            self._worker.cancel()
+            self._worker.wait(2000)
+        event.accept()
 
     def _refresh_counter(self):
         done = self._model.done_count()

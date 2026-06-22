@@ -14,10 +14,10 @@ _SUPPORTED = (
     "*.html *.htm *.csv *.json *.xml *.epub *.msg *.zip"
 )
 
-# Palette
-_BLOB      = QColor(110, 142, 255)   # periwinkle
-_BORDER    = QColor(200, 204, 226)   # muted lavender-grey
-_BORDER_HI = QColor(110, 142, 255)  # active drag
+# Palette derivada del logo: violeta #643CC8 = RGB(100, 60, 200)
+_BLOB      = QColor(100,  60, 200)   # violeta del logo
+_BORDER    = QColor(180, 168, 225)   # violeta claro
+_BORDER_HI = QColor(100,  60, 200)   # violeta del logo al hacer drag
 
 
 class DropZone(QWidget):
@@ -29,7 +29,7 @@ class DropZone(QWidget):
         self._pulse = 0.0
         self._drag_active = False
         self.setAcceptDrops(True)
-        self.setStyleSheet("background: #F6F7FB;")
+        self.setStyleSheet("background: #F5F4FC;")
 
         self._timer = QTimer(self)
         self._timer.timeout.connect(self._tick)
@@ -46,7 +46,7 @@ class DropZone(QWidget):
         icon = QLabel("✦")
         icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
         icon.setStyleSheet(
-            "font-size: 32px; color: #9BAEFF; background: transparent; letter-spacing: 2px;"
+            "font-size: 32px; color: #643CC8; background: transparent; letter-spacing: 2px;"
         )
         layout.addWidget(icon)
 
@@ -56,7 +56,7 @@ class DropZone(QWidget):
         hint.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hint.setWordWrap(True)
         hint.setStyleSheet(
-            "font-size: 14px; font-weight: 600; color: #1C1C2E; background: transparent;"
+            "font-size: 14px; font-weight: 600; color: #12165A; background: transparent;"
         )
         layout.addWidget(hint)
 
@@ -79,15 +79,15 @@ class DropZone(QWidget):
         btn.setFixedHeight(38)
         btn.setStyleSheet("""
             QPushButton {
-                background: #EEF0FF;
-                color: #5A6BE8;
+                background: #EDE8FB;
+                color: #643CC8;
                 border: none;
                 border-radius: 10px;
                 font-size: 13px;
                 font-weight: 600;
             }
-            QPushButton:hover  { background: #E2E5FF; }
-            QPushButton:pressed { background: #D4D9FF; }
+            QPushButton:hover  { background: #E0D9F8; }
+            QPushButton:pressed { background: #D4CCF3; }
         """)
         btn.clicked.connect(self._open_dialog)
         layout.addWidget(btn)

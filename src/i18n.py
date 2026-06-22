@@ -17,7 +17,7 @@ _STRINGS: dict[str, dict[str, str]] = {
         "queue_clear": "Limpiar",
         "queue_header": "Archivos",
         "counter": "{done} / {total} listos",
-        "window_title": "Markiti",
+        "window_title": "markIT",
     },
     "en": {
         "drop_hint": "Drop your files here",
@@ -35,7 +35,7 @@ _STRINGS: dict[str, dict[str, str]] = {
         "queue_clear": "Clear",
         "queue_header": "Files",
         "counter": "{done} / {total} done",
-        "window_title": "Markiti",
+        "window_title": "markIT",
     },
 }
 
