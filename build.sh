@@ -24,6 +24,9 @@ echo "==> Building markIT.app"
     --collect-all pdfplumber \
     --collect-all mammoth \
     --collect-all pptx \
+    --collect-all speech_recognition \
+    --collect-all olefile \
+    --collect-all youtube_transcript_api \
     --collect-data magika \
     --noconfirm \
     src/main.py

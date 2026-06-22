@@ -4,6 +4,7 @@ lxml==6.1.1
 magika==0.6.3
 mammoth==1.11.0
 markitdown==0.1.6
+olefile==0.47
 openpyxl==3.1.5
 pandas==3.0.3
 pdfminer.six==20260107
@@ -14,4 +15,6 @@ PyQt6==6.11.0
 PyQt6-Qt6==6.11.1
 PyQt6_sip==13.11.1
 requests==2.34.2
+SpeechRecognition==3.17.0
 xlrd==2.0.1
+youtube-transcript-api==1.2.4
