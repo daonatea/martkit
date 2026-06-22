@@ -175,8 +175,4 @@ if __name__ == "__main__":
     if _platform.system() == "Darwin":
         build_iconset()
     build_ico()
-    # Vista previa
-    preview = make_icon(512)
-    preview.save("/tmp/markit_icon_preview.png")
-    import subprocess
-    subprocess.run(["open", "/tmp/markit_icon_preview.png"])
+    print("Listo.")
