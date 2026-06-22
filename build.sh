@@ -20,6 +20,10 @@ echo "==> Building markIT.app"
     --hidden-import PyQt6.QtWidgets \
     --hidden-import PyQt6.QtGui \
     --collect-all markitdown \
+    --collect-all pdfminer \
+    --collect-all pdfplumber \
+    --collect-all mammoth \
+    --collect-all pptx \
     --collect-data magika \
     --noconfirm \
     src/main.py
