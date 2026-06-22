@@ -8,7 +8,7 @@ olefile==0.47
 openpyxl==3.1.5
 pandas==3.0.3
 pdfminer.six==20260107
-pdfplumber==0.11.9
+pdfplumber==0.11.10
 pydub==0.25.1
 python-pptx==1.0.2
 PyQt6==6.11.0
