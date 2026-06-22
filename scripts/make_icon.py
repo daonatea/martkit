@@ -172,7 +172,8 @@ def build_iconset():
 if __name__ == "__main__":
     import platform as _platform
     print("Generando íconos de markIT...")
-    build_iconset()
+    if _platform.system() == "Darwin":
+        build_iconset()
     build_ico()
     # Vista previa
     preview = make_icon(512)

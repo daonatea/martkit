@@ -17,14 +17,54 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install dependencies
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pyinstaller create-dmg
+          pip install pyinstaller pillow
+
+      - name: Generate icons
+        run: python scripts/make_icon.py
 
       - name: Build macOS app
-        run: bash build.sh
+        run: |
+          python -m PyInstaller \
+            --windowed \
+            --onedir \
+            --name "markIT" \
+            --icon "assets/markIT.icns" \
+            --paths src \
+            --hidden-import markitdown \
+            --hidden-import markitdown._base_converter \
+            --hidden-import PyQt6.QtCore \
+            --hidden-import PyQt6.QtWidgets \
+            --hidden-import PyQt6.QtGui \
+            --collect-all markitdown \
+            --collect-data magika \
+            --noconfirm \
+            src/main.py
+
+      - name: Sign app
+        run: |
+          codesign -s - --force --deep dist/markIT.app
+
+      - name: Build DMG
+        run: |
+          create-dmg \
+            --volname "markIT" \
+            --volicon "assets/markIT.icns" \
+            --window-pos 200 120 \
+            --window-size 560 340 \
+            --icon-size 128 \
+            --icon "markIT.app" 140 170 \
+            --hide-extension "markIT.app" \
+            --app-drop-link 420 170 \
+            --no-internet-enable \
+            "dist/markIT.dmg" \
+            "dist/markIT.app"
 
       - name: Upload DMG
         uses: actions/upload-artifact@v4
