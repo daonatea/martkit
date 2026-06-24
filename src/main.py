@@ -3,12 +3,14 @@ import sys
 
 
 def _check_arch() -> bool:
-    """Muestra un aviso si el Mac no es Apple Silicon y retorna False."""
+    """En macOS, muestra aviso si no es Apple Silicon y retorna False."""
+    if platform.system() != "Darwin":
+        return True
+
     machine = platform.machine()
     if machine == "arm64":
         return True
 
-    # Necesitamos QApplication mínima para mostrar el diálogo
     from PyQt6.QtWidgets import QApplication, QMessageBox
     app = QApplication(sys.argv)
     dlg = QMessageBox()

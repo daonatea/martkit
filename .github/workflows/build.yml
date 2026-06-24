@@ -124,7 +124,37 @@ jobs:
             --noconfirm `
             src\main.py
 
-      - name: Upload EXE
+      - name: Upload unsigned EXE
+        id: upload-unsigned-artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: markIT-Windows-unsigned
+          path: dist/markIT/
+
+      # SignPath code signing — requires secrets configured after SignPath Foundation approval:
+      #   SIGNPATH_API_TOKEN  → API token with Submitter role (add in repo Settings → Secrets)
+      # Replace the placeholder values below with your actual SignPath organization/project/policy slugs.
+      - name: Sign EXE (SignPath Foundation)
+        if: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: 'REPLACE_WITH_ORG_ID'
+          project-slug: 'markit'
+          signing-policy-slug: 'release-signing'
+          github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: 'dist/markIT-signed/'
+
+      - name: Upload signed EXE
+        if: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: markIT-Windows
+          path: dist/markIT-signed/
+
+      - name: Upload EXE (fallback when unsigned)
+        if: ${{ secrets.SIGNPATH_API_TOKEN == '' }}
         uses: actions/upload-artifact@v7
         with:
           name: markIT-Windows
