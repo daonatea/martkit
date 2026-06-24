@@ -5,6 +5,7 @@ from pathlib import Path
 from PyQt6.QtCore import QThread, pyqtSignal
 
 from transcribe import is_audio, transcribe_audio
+from ocr import is_image, ocr_image
 
 _LOG = Path(tempfile.gettempdir()) / "markit.log"
 
@@ -22,6 +23,7 @@ class ConvertWorker(QThread):
     file_started = pyqtSignal(str)
     file_finished = pyqtSignal(str, str)
     file_error = pyqtSignal(str, str)
+    file_warning = pyqtSignal(str)
     all_done = pyqtSignal()
 
     def __init__(self, files: list[str], output_dir: str, parent=None):
@@ -52,6 +54,9 @@ class ConvertWorker(QThread):
                     if is_audio(path):
                         _log(f"Audio -> transcribiendo con Whisper: {path}")
                         text = transcribe_audio(path)
+                    elif is_image(path):
+                        _log(f"Imagen -> OCR con RapidOCR: {path}")
+                        text = ocr_image(path)
                     else:
                         if md is None:
                             _log("Instanciando MarkItDown...")
@@ -59,6 +64,10 @@ class ConvertWorker(QThread):
                             md = MarkItDown()
                             _log("MarkItDown OK")
                         text = md.convert(path).text_content
+                    if not (text or "").strip():
+                        _log(f"Sin contenido para convertir: {path}")
+                        self.file_warning.emit(path)
+                        continue
                     stem = Path(path).stem
                     out_path = out / f"{stem}.md"
                     if out_path.exists():

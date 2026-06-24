@@ -33,19 +33,42 @@ def test_converts_html_file(qapp, tmp_html, tmp_path):
 
 def test_routes_audio_to_whisper_not_markitdown(qapp, tmp_audio, tmp_path, monkeypatch):
     import converter
-    # Stub de transcripción: evita cargar el modelo Whisper en las pruebas.
-    monkeypatch.setattr(converter, "transcribe_audio", lambda p: "# clip\n\nhola mundo\n")
+    monkeypatch.setattr(converter, "transcribe_audio", lambda p: "hola mundo")
     out_dir = tmp_path / "output"
     worker = converter.ConvertWorker([tmp_audio], str(out_dir))
-
     finished = []
     worker.file_finished.connect(lambda p, out: finished.append(out))
     worker.run()
-
     assert len(finished) == 1
     out_file = Path(finished[0])
     assert out_file.stem == "clip"
-    assert "hola mundo" in out_file.read_text(encoding="utf-8")
+    assert out_file.read_text(encoding="utf-8") == "hola mundo"
+
+
+def test_routes_image_to_ocr(qapp, tmp_png, tmp_path, monkeypatch):
+    import converter
+    monkeypatch.setattr(converter, "ocr_image", lambda p: "texto en imagen")
+    out_dir = tmp_path / "output"
+    worker = converter.ConvertWorker([tmp_png], str(out_dir))
+    finished = []
+    worker.file_finished.connect(lambda p, out: finished.append(out))
+    worker.run()
+    assert len(finished) == 1
+    assert Path(finished[0]).read_text(encoding="utf-8") == "texto en imagen"
+
+
+def test_empty_result_emits_warning_and_writes_no_file(qapp, tmp_png, tmp_path, monkeypatch):
+    import converter
+    monkeypatch.setattr(converter, "ocr_image", lambda p: "   ")  # solo espacios
+    out_dir = tmp_path / "output"
+    worker = converter.ConvertWorker([tmp_png], str(out_dir))
+    warned, finished = [], []
+    worker.file_warning.connect(lambda p: warned.append(p))
+    worker.file_finished.connect(lambda p, out: finished.append(out))
+    worker.run()
+    assert warned == [tmp_png]
+    assert finished == []
+    assert not (out_dir / "clip.md").exists()
 
 
 def test_emits_error_on_missing_file(qapp, tmp_path):

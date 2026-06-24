@@ -40,3 +40,14 @@ def tmp_audio(tmp_path):
     f = tmp_path / "clip.mp3"
     f.write_bytes(b"\x00\x00")
     return str(f)
+
+@pytest.fixture
+def tmp_png(tmp_path):
+    # PNG 1x1 transparente válido (las pruebas stubean el OCR).
+    import base64
+    data = base64.b64decode(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+    )
+    f = tmp_path / "clip.png"
+    f.write_bytes(data)
+    return str(f)
