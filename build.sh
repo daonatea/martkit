@@ -20,6 +20,7 @@ echo "==> Building markIT.app"
     --hidden-import PyQt6.QtWidgets \
     --hidden-import PyQt6.QtGui \
     --hidden-import transcribe \
+    --hidden-import ocr \
     --collect-all markitdown \
     --collect-all pdfminer \
     --collect-all pdfplumber \
@@ -29,6 +30,9 @@ echo "==> Building markIT.app"
     --collect-all faster_whisper \
     --collect-all ctranslate2 \
     --collect-all av \
+    --collect-all rapidocr_onnxruntime \
+    --collect-all cv2 \
+    --collect-all shapely \
     --collect-data magika \
     --noconfirm \
     src/main.py
