@@ -19,14 +19,16 @@ echo "==> Building markIT.app"
     --hidden-import PyQt6.QtCore \
     --hidden-import PyQt6.QtWidgets \
     --hidden-import PyQt6.QtGui \
+    --hidden-import transcribe \
     --collect-all markitdown \
     --collect-all pdfminer \
     --collect-all pdfplumber \
     --collect-all mammoth \
     --collect-all pptx \
-    --collect-all speech_recognition \
     --collect-all olefile \
-    --collect-all youtube_transcript_api \
+    --collect-all faster_whisper \
+    --collect-all ctranslate2 \
+    --collect-all av \
     --collect-data magika \
     --noconfirm \
     src/main.py

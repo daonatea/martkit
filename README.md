@@ -11,10 +11,14 @@ Desktop app for macOS and Windows that converts documents and media files to Mar
 | Category | Formats |
 |---|---|
 | Documents | PDF, Word (.docx), PowerPoint (.pptx), Excel (.xlsx) |
+| Data | CSV, JSON, XML |
 | Web | HTML |
-| Audio | MP3, WAV, M4A (transcribed via SpeechRecognition) |
+| Books | EPUB |
+| Audio | MP3, WAV, M4A, OGG, FLAC, AAC (transcribed locally with faster-whisper) |
 | Email | Outlook (.msg) |
-| Video | YouTube URLs (transcript extraction) |
+| Archives | ZIP |
+
+> **Audio transcription** runs fully offline with [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (multilingual, no system ffmpeg required). The speech model (~140 MB) is downloaded once on first use and then cached locally.
 
 ## Download
 

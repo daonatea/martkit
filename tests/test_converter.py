@@ -31,6 +31,23 @@ def test_converts_html_file(qapp, tmp_html, tmp_path):
     assert "Hello" in content
 
 
+def test_routes_audio_to_whisper_not_markitdown(qapp, tmp_audio, tmp_path, monkeypatch):
+    import converter
+    # Stub de transcripción: evita cargar el modelo Whisper en las pruebas.
+    monkeypatch.setattr(converter, "transcribe_audio", lambda p: "# clip\n\nhola mundo\n")
+    out_dir = tmp_path / "output"
+    worker = converter.ConvertWorker([tmp_audio], str(out_dir))
+
+    finished = []
+    worker.file_finished.connect(lambda p, out: finished.append(out))
+    worker.run()
+
+    assert len(finished) == 1
+    out_file = Path(finished[0])
+    assert out_file.stem == "clip"
+    assert "hola mundo" in out_file.read_text(encoding="utf-8")
+
+
 def test_emits_error_on_missing_file(qapp, tmp_path):
     from converter import ConvertWorker
     worker = ConvertWorker(["/nonexistent/file.xyz"], str(tmp_path / "out"))

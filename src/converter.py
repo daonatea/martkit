@@ -1,10 +1,12 @@
+import tempfile
 import traceback
 from datetime import datetime
 from pathlib import Path
 from PyQt6.QtCore import QThread, pyqtSignal
-from markitdown import MarkItDown
 
-_LOG = Path("/tmp/markit.log")
+from transcribe import is_audio, transcribe_audio
+
+_LOG = Path(tempfile.gettempdir()) / "markit.log"
 
 
 def _log(msg: str) -> None:
@@ -36,9 +38,9 @@ class ConvertWorker(QThread):
         try:
             if self._cancelled:
                 return
-            _log("Instanciando MarkItDown...")
-            md = MarkItDown()
-            _log("MarkItDown OK")
+            # markitdown se instancia de forma perezosa: si solo hay audio, no
+            # hace falta cargarlo. Whisper se carga aparte dentro de transcribe.
+            md = None
             out = Path(self._output_dir)
             out.mkdir(parents=True, exist_ok=True)
             for path in self._files:
@@ -47,7 +49,16 @@ class ConvertWorker(QThread):
                 _log(f"Convirtiendo: {path}")
                 self.file_started.emit(path)
                 try:
-                    result = md.convert(path)
+                    if is_audio(path):
+                        _log(f"Audio -> transcribiendo con Whisper: {path}")
+                        text = transcribe_audio(path)
+                    else:
+                        if md is None:
+                            _log("Instanciando MarkItDown...")
+                            from markitdown import MarkItDown
+                            md = MarkItDown()
+                            _log("MarkItDown OK")
+                        text = md.convert(path).text_content
                     stem = Path(path).stem
                     out_path = out / f"{stem}.md"
                     if out_path.exists():
@@ -56,7 +67,7 @@ class ConvertWorker(QThread):
                             if not candidate.exists():
                                 out_path = candidate
                                 break
-                    out_path.write_text(result.text_content, encoding="utf-8")
+                    out_path.write_text(text, encoding="utf-8")
                     _log(f"OK -> {out_path}")
                     self.file_finished.emit(path, str(out_path))
                 except Exception as exc:

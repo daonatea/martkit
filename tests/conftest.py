@@ -33,3 +33,10 @@ def tmp_html(tmp_path):
     f = tmp_path / "sample.html"
     f.write_text("<html><body><h1>Hello</h1><p>World</p></body></html>", encoding="utf-8")
     return str(f)
+
+@pytest.fixture
+def tmp_audio(tmp_path):
+    # Contenido irrelevante: las pruebas que lo usan stubean la transcripción.
+    f = tmp_path / "clip.mp3"
+    f.write_bytes(b"\x00\x00")
+    return str(f)

@@ -19,7 +19,11 @@ python -m PyInstaller ^
     --hidden-import PyQt6.QtCore ^
     --hidden-import PyQt6.QtWidgets ^
     --hidden-import PyQt6.QtGui ^
+    --hidden-import transcribe ^
     --collect-all markitdown ^
+    --collect-all faster_whisper ^
+    --collect-all ctranslate2 ^
+    --collect-all av ^
     --collect-data magika ^
     --noconfirm ^
     src\main.py
