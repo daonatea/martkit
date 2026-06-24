@@ -27,6 +27,15 @@ Go to [Releases](../../releases) and download the latest version for your platfo
 > **Not sure which Mac you have?** Click  → **About This Mac**.
 > If **Chip** shows "Apple M…" → download ARM. If **Processor** shows "Intel" → download Intel.
 
+### macOS installation note
+
+macOS will block the app on first launch because it is not notarized (requires a paid Apple Developer account). To open it:
+
+1. Right-click `markIT.app` → **Open**
+2. Click **Open** in the dialog
+
+Or if the option doesn't appear: **System Settings → Privacy & Security → Open Anyway**
+
 ### Windows installation note
 
 Windows may show a SmartScreen warning on first launch ("Windows protected your PC"). This is expected for open-source apps without a paid certificate. To run:
@@ -34,7 +43,7 @@ Windows may show a SmartScreen warning on first launch ("Windows protected your 
 1. Click **More info**
 2. Click **Run anyway**
 
-The app is open source — you can review all source code in this repository.
+Both warnings are expected for open-source apps — you can review all source code in this repository.
 
 ## Build from source
 
