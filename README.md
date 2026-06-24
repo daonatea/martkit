@@ -72,4 +72,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Code signing
 
-Windows binaries are signed by [SignPath Foundation](https://signpath.org). See [docs/code-signing-policy.md](docs/code-signing-policy.md).
+Windows binaries are submitted for signing through [SignPath Foundation](https://signpath.org) (application in progress). See [docs/code-signing-policy.md](docs/code-signing-policy.md).
