@@ -20,7 +20,8 @@ Desktop app for macOS and Windows that converts documents and media files to Mar
 
 Go to [Releases](../../releases) and download the latest version for your platform:
 
-- **macOS** (Apple Silicon M1/M2/M3/M4): `markIT.dmg`
+- **macOS Apple Silicon** (M1/M2/M3/M4): `markIT-macOS-ARM.dmg`
+- **macOS Intel** (2020 and earlier): `markIT-macOS-Intel.dmg`
 - **Windows** (10/11 64-bit): `markIT-Windows.zip` → extract and run `markIT.exe`
 
 ### Windows installation note
