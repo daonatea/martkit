@@ -10,15 +10,17 @@ Desktop app for macOS and Windows that converts documents and media files to Mar
 
 | Category | Formats |
 |---|---|
-| Documents | PDF, Word (.docx), PowerPoint (.pptx), Excel (.xlsx) |
+| Documents | PDF, Word (.docx), PowerPoint (.pptx), Excel (.xlsx / .xls) |
+| Text | TXT, Markdown (.md) |
 | Data | CSV, JSON, XML |
 | Web | HTML |
 | Books | EPUB |
+| Images | JPG, JPEG, PNG, BMP, TIFF, WEBP (text extracted via local OCR) |
 | Audio | MP3, WAV, M4A, OGG, FLAC, AAC (transcribed locally with faster-whisper) |
 | Email | Outlook (.msg) |
 | Archives | ZIP |
 
-> **Audio transcription** runs fully offline with [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (multilingual, no system ffmpeg required). The speech model (~140 MB) is downloaded once on first use and then cached locally.
+> **Images** are read with [RapidOCR](https://github.com/RapidAI/RapidOCR) (offline, no system dependencies). **Audio** is transcribed with [faster-whisper](https://github.com/SYSTRAN/faster-whisper); the speech model (~140 MB) is downloaded once on first use (the app asks for confirmation). If a file has no extractable text (e.g. a photo with no text, or silent audio), no Markdown file is produced and the item is flagged with a warning.
 
 ## Download
 
