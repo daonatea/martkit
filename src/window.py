@@ -12,6 +12,7 @@ from drop_zone import DropZone
 from queue_widget import QueueWidget
 from queue_model import FileQueueModel, FileStatus
 from converter import ConvertWorker
+from transcribe import is_audio, is_model_cached
 
 # Palette derivada del logo: navy #12165A + violeta #643CC8
 _BG_APP      = "#F5F4FC"
@@ -181,8 +182,25 @@ class MainWindow(QMainWindow):
 
     def _on_files_added(self, paths: list[str]):
         self._queue.add_files(paths)
+        audios = [p for p in paths if is_audio(p)]
+        if audios and not is_model_cached():
+            if not self._ask_audio_download():
+                for p in audios:
+                    self._queue.update_status(p, FileStatus.SKIPPED)
         self._refresh_counter()
         self._refresh_convert_btn()
+
+    def _ask_audio_download(self) -> bool:
+        box = QMessageBox(self)
+        box.setWindowTitle(self._strings["audio_dl_title"])
+        box.setIcon(QMessageBox.Icon.Question)
+        box.setText(self._strings["audio_dl_body"])
+        accept = box.addButton(
+            self._strings["audio_dl_accept"], QMessageBox.ButtonRole.AcceptRole
+        )
+        box.addButton(self._strings["audio_dl_skip"], QMessageBox.ButtonRole.RejectRole)
+        box.exec()
+        return box.clickedButton() is accept
 
     def _change_folder(self):
         path = QFileDialog.getExistingDirectory(
@@ -221,6 +239,7 @@ class MainWindow(QMainWindow):
             )
         )
         self._worker.file_error.connect(self._on_file_error)
+        self._worker.file_warning.connect(self._on_file_warning)
         self._worker.all_done.connect(self._on_all_done)
         self._worker.start()
 
@@ -265,6 +284,12 @@ class MainWindow(QMainWindow):
         dlg.setText(f"No se pudo convertir <b>{name}</b>")
         dlg.setInformativeText(error)
         dlg.exec()
+
+    def _on_file_warning(self, path: str):
+        self._queue.update_status(
+            path, FileStatus.WARNING, self._strings["warn_no_content"]
+        )
+        self._refresh_counter()
 
     def _on_all_done(self):
         self._convert_btn.setText(self._strings["btn_convert"])
