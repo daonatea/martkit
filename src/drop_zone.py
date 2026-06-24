@@ -10,9 +10,11 @@ from PyQt6.QtGui import (
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog
 
 _SUPPORTED_EXTS = (
-    ".pdf", ".docx", ".doc", ".xlsx", ".xls", ".pptx", ".ppt",
+    ".pdf", ".docx", ".xlsx", ".xls", ".pptx",
     ".html", ".htm", ".csv", ".json", ".xml", ".epub", ".msg", ".zip",
+    ".txt", ".md",
     ".mp3", ".wav", ".m4a", ".ogg", ".flac", ".aac",
+    ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".webp",
 )
 _SUPPORTED = " ".join(f"*{ext}" for ext in _SUPPORTED_EXTS)
 
