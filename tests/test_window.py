@@ -9,11 +9,11 @@ def test_main_window_opens(qapp):
 
 
 def test_declined_audio_is_skipped(qapp, monkeypatch):
-    import transcribe
+    import window
     from window import MainWindow
     from queue_model import FileStatus
 
-    monkeypatch.setattr(transcribe, "is_model_cached", lambda: False)
+    monkeypatch.setattr(window, "is_model_cached", lambda: False)
     w = MainWindow()
     # Simula que el usuario rechaza la descarga.
     monkeypatch.setattr(w, "_ask_audio_download", lambda: False)
@@ -26,11 +26,11 @@ def test_declined_audio_is_skipped(qapp, monkeypatch):
 
 
 def test_accepted_audio_stays_waiting(qapp, monkeypatch):
-    import transcribe
+    import window
     from window import MainWindow
     from queue_model import FileStatus
 
-    monkeypatch.setattr(transcribe, "is_model_cached", lambda: False)
+    monkeypatch.setattr(window, "is_model_cached", lambda: False)
     w = MainWindow()
     monkeypatch.setattr(w, "_ask_audio_download", lambda: True)
     w._on_files_added(["/song.mp3"])
@@ -40,11 +40,11 @@ def test_accepted_audio_stays_waiting(qapp, monkeypatch):
 
 
 def test_no_dialog_when_model_cached(qapp, monkeypatch):
-    import transcribe
+    import window
     from window import MainWindow
     from queue_model import FileStatus
 
-    monkeypatch.setattr(transcribe, "is_model_cached", lambda: True)
+    monkeypatch.setattr(window, "is_model_cached", lambda: True)
     called = []
     w = MainWindow()
     monkeypatch.setattr(w, "_ask_audio_download", lambda: called.append(True) or True)
