@@ -40,9 +40,6 @@ _BG_CONV     = "#F0ECFD"   # violeta muy claro
 _BG_ERR      = "#FFF4F4"
 _BG_ROW      = "#FFFFFF"
 _BORDER_ROW  = "#EAE7F8"
-_CLR_WARN    = "#C9920B"   # ámbar
-_CLR_SKIP    = "#9A9BB8"   # gris
-_BG_WARN     = "#FFF8EC"
 
 
 class FileRow(QFrame):
@@ -107,18 +104,6 @@ class FileRow(QFrame):
             self.setStyleSheet(f"QFrame{{background:{_BG_ERR};border-bottom:1px solid {_BORDER_ROW};}}")
             if self._item.error:
                 self._status_lbl.setToolTip(self._item.error)
-            self._timer.stop()
-        elif s == FileStatus.WARNING:
-            self._status_lbl.setText(f"⚠ {self._strings['status_warning']}")
-            self._status_lbl.setStyleSheet(f"font-size:11px;color:{_CLR_WARN};font-weight:600;")
-            self.setStyleSheet(f"QFrame{{background:{_BG_WARN};border-bottom:1px solid {_BORDER_ROW};}}")
-            if self._item.error:
-                self._status_lbl.setToolTip(self._item.error)
-            self._timer.stop()
-        elif s == FileStatus.SKIPPED:
-            self._status_lbl.setText(self._strings["status_skipped"])
-            self._status_lbl.setStyleSheet(f"font-size:11px;color:{_CLR_SKIP};font-style:italic;")
-            self.setStyleSheet(f"QFrame{{background:{_BG_ROW};border-bottom:1px solid {_BORDER_ROW};}}")
             self._timer.stop()
 
     def _tick(self):

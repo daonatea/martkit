@@ -9,14 +9,10 @@ from PyQt6.QtGui import (
 )
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog
 
-_SUPPORTED_EXTS = (
-    ".pdf", ".docx", ".xlsx", ".xls", ".pptx",
-    ".html", ".htm", ".csv", ".json", ".xml", ".epub", ".msg", ".zip",
-    ".txt", ".md",
-    ".mp3", ".wav", ".m4a", ".ogg", ".flac", ".aac",
-    ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".webp",
+_SUPPORTED = (
+    "*.pdf *.docx *.doc *.xlsx *.xls *.pptx *.ppt "
+    "*.html *.htm *.csv *.json *.xml *.epub *.msg *.zip"
 )
-_SUPPORTED = " ".join(f"*{ext}" for ext in _SUPPORTED_EXTS)
 
 # Palette derivada del logo: violeta #643CC8 = RGB(100, 60, 200)
 _BLOB      = QColor(100,  60, 200)   # violeta del logo
@@ -69,7 +65,7 @@ class DropZone(QWidget):
         sub.setStyleSheet("font-size: 12px; color: #7C7D95; background: transparent;")
         layout.addWidget(sub)
 
-        formats = QLabel("PDF · Word · Excel · PowerPoint · Audio · más")
+        formats = QLabel("PDF · Word · Excel · PowerPoint · HTML · más")
         formats.setAlignment(Qt.AlignmentFlag.AlignCenter)
         formats.setWordWrap(True)
         formats.setStyleSheet(
@@ -139,12 +135,7 @@ class DropZone(QWidget):
     def dropEvent(self, event: QDropEvent):
         self._drag_active = False
         self.update()
-        paths = [
-            u.toLocalFile()
-            for u in event.mimeData().urls()
-            if u.isLocalFile()
-            and Path(u.toLocalFile()).suffix.lower() in _SUPPORTED_EXTS
-        ]
+        paths = [u.toLocalFile() for u in event.mimeData().urls() if u.isLocalFile()]
         if paths:
             self.files_dropped.emit(paths)
 

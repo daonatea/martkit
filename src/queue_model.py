@@ -8,8 +8,6 @@ class FileStatus(Enum):
     CONVERTING = "converting"
     DONE = "done"
     ERROR = "error"
-    WARNING = "warning"
-    SKIPPED = "skipped"
 
 
 @dataclass
@@ -43,11 +41,6 @@ class FileItem:
             ".ppt": "📋", ".html": "🌐", ".htm": "🌐",
             ".csv": "📋", ".json": "📋", ".xml": "📋",
             ".epub": "📚", ".msg": "✉️", ".zip": "🗜️",
-            ".mp3": "🎙️", ".wav": "🎙️", ".m4a": "🎙️",
-            ".ogg": "🎙️", ".flac": "🎙️", ".aac": "🎙️",
-            ".jpg": "🖼️", ".jpeg": "🖼️", ".png": "🖼️",
-            ".bmp": "🖼️", ".tiff": "🖼️", ".tif": "🖼️", ".webp": "🖼️",
-            ".txt": "📄", ".md": "📄",
         }.get(ext, "📄")
 
 
