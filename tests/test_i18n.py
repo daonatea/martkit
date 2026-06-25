@@ -5,6 +5,8 @@ REQUIRED_KEYS = [
     "btn_open_folder", "status_waiting", "status_converting", "status_done",
     "status_error", "folder_label", "folder_change", "queue_clear",
     "queue_header", "counter", "window_title",
+    "status_warning", "status_skipped", "warn_no_content",
+    "audio_dl_title", "audio_dl_body", "audio_dl_accept", "audio_dl_skip",
 ]
 
 def test_spanish_locale(qapp):

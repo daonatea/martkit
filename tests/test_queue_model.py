@@ -63,3 +63,17 @@ def test_file_item_type_icons():
     assert FileItem("/x.pptx").type_icon == "📋"
     assert FileItem("/x.html").type_icon == "🌐"
     assert FileItem("/x.unknown").type_icon == "📄"
+
+
+def test_file_status_has_warning_and_skipped():
+    assert FileStatus.WARNING.value == "warning"
+    assert FileStatus.SKIPPED.value == "skipped"
+
+
+def test_file_item_image_and_text_icons():
+    assert FileItem("/x.png").type_icon == "🖼️"
+    assert FileItem("/x.jpg").type_icon == "🖼️"
+    assert FileItem("/x.jpeg").type_icon == "🖼️"
+    assert FileItem("/x.webp").type_icon == "🖼️"
+    assert FileItem("/x.txt").type_icon == "📄"
+    assert FileItem("/x.md").type_icon == "📄"
